@@ -16,11 +16,10 @@ A Retrieval-Augmented Generation (RAG) chatbot framework built with **SGLang**, 
    - [Configuration](#configuration)  
    - [Running Locally](#running-locally)  
    - [Using Docker / Compose](#using-docker--compose)  
-4. [Usage](#usage)  
-5. [Code Structure](#code-structure)  
-6. [Contributing](#contributing)  
-7. [License](#license)  
-8. [Acknowledgments](#acknowledgments)
+4. [Code Structure](#code-structure)  
+5. [Contributing](#contributing)  
+6. [License](#license)  
+7. [Acknowledgments](#acknowledgments)
 
 ---
 
