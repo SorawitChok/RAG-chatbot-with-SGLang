@@ -46,8 +46,6 @@ The system follows a modular pipeline:
 4. **Routing / API** — handles incoming requests, authentication, and interfaces with the core modules.  
 5. **Vector DB layer** — responsible for embedding text, storing vectors, and similarity search.  
 
-This design allows you to experiment with different vector DBs (e.g. FAISS, Pinecone, Weaviate) or generation backends with minimal adjustments.
-
 ---
 
 ## Getting Started
@@ -56,9 +54,9 @@ This design allows you to experiment with different vector DBs (e.g. FAISS, Pine
 
 - Python 3.8+  
 - pip (or venv)  
-- (Optional) Docker & Docker Compose  
-- Access to an LLM / generative model API (e.g. OpenAI, local LLaMA-like models)  
-- (Optional) Access to a vector DB or library (FAISS, Pinecone, etc.)
+- Docker & Docker Compose  
+- Access to an LLM / generative model API (e.g. OpenAI, local LLM models)  
+- Access to a vector DB or library (FAISS, Pinecone, etc.)
 
 ### Installation
 
@@ -81,28 +79,6 @@ This design allows you to experiment with different vector DBs (e.g. FAISS, Pine
    ```bash
    pip install -r requirements.txt
    ```
-
-### Configuration
-
-You may need to set environment variables or configuration entries (e.g. API keys, vector DB endpoints). Example variables:
-
-| Variable          | Purpose                            | Example / Notes          |
-| ----------------- | ---------------------------------- | ------------------------ |
-| `OPENAI_API_KEY`  | For OpenAI model access            | `sk-...`                 |
-| `VECTOR_DB_URL`   | URL or endpoint for vector DB      | `http://localhost:8000`  |
-| `EMBEDDING_MODEL` | Embedding model name or identifier | `text-embedding-ada-002` |
-| `LLM_MODEL`       | Generation model identifier        | `gpt-3.5-turbo`          |
-| `AUTH_SECRET`     | Secret or token for authentication | `my_secret_token`        |
-
-You can also modify settings in a config file or via command-line flags (if implemented).
-
-### Running Locally
-
-```bash
-python main.py
-```
-
-This should start the service (e.g. via `uvicorn` or similar). Check local logs and endpoints (e.g. `http://localhost:8000/health` or `/api/chat`).
 
 ### Using Docker / Compose
 
