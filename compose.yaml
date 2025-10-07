@@ -1,0 +1,85 @@
+# Copyright (c) 2024, FAQSure.  All rights reserved.
+
+# Authors: Sorawit Chokphantavee, Sirawit Chokphantavee & Somrudee Deepaisarn
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+services:
+    chromaDB:
+        image: chromadb/chroma
+        container_name: chromaDB
+        ports:
+            - 8000:8000
+        volumes:
+            - ./chroma:/chroma/chroma
+        environment:
+            - IS_PERSISTENT=TRUE
+            - ANONYMIZED_TELEMETRY=TRUE
+        command: >
+            --workers 1
+            --host 0.0.0.0
+            --port 8000
+            --proxy-headers
+            --log-config chromadb/log_config.yml
+            --timeout-keep-alive 30
+        networks:
+            - network
+
+    sglang:
+        image: lmsysorg/sglang
+        container_name: sglang
+        ports:
+            - 30000:30000
+        volumes:
+            - ~/.cache/huggingface:/root/.cache/huggingface
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - capabilities: ["gpu"]
+        command: >
+            python3 -m sglang.launch_server
+            --model-path SorawitChok/SeaLLM3-7B-Chat-AWQ
+            --max-total-tokens 4096
+            --host 0.0.0.0
+            --port 30000
+        networks:
+            - network
+
+    core:
+        image: core-api
+        container_name: core
+        depends_on:
+            - chromaDB
+        ports:
+            - 11436:11436
+        networks:
+            - network
+
+    ngrok:
+        image: ngrok/ngrok
+        container_name: ngrok-tunnel
+        ports:
+            - 4040:4040
+        environment:
+            - NGROK_AUTHTOKEN=YOUR_NGROK_AUTHTOKEN
+        command:
+            - "http"
+            - "http://core:11436"
+            - "--domain=YOUR_DOMAIN"
+        networks:
+            - network
+
+networks:
+    network:
+        driver: bridge
